@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\News;
+use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -62,7 +64,24 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
-    }        
+    }    
+
+    /**
+     * Выводим новости (отладка)
+     * @return type
+     */
+    public function actionViewNews()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => News::find()->orderBy('saved_at DESC')
+        ]);
+        
+        return $this->render('view-news', [
+            'dataProvider' => $dataProvider
+        ]);
+    }   
+    
+    
 
     /**
      * Login action.
