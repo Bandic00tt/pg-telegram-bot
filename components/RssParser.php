@@ -29,7 +29,6 @@ class RssParser
             if (!$model->save() && !empty($model->errors)){
                 throw new \Exception('Не удалось сохранить новость: '. print_r($model->errors, true));
             }
-            
         }
         
         return $data;

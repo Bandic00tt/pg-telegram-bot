@@ -11,6 +11,41 @@ $this->title = 'Новости (отладка)';
 <br><br>
 
 <?= GridView::widget([
-    'dataProvider' => $dataProvider
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        'title',
+        [
+            'attribute' => 'url',
+            'format' => 'html',
+            'value' => function($model){
+                return Html::a($model->url, $model->url, [
+                    'target' => '_blank'
+                ]);
+            }
+        ],
+        'description',
+        [
+            'attribute' => 'url',
+            'format' => 'html',
+            'value' => function($model){
+                return Html::img($model->image, [
+                    'style' => 'width: 200px;'
+                ]);
+            }
+        ],
+        'pub_date',
+        'saved_at',
+        [
+            'attribute' => 'posted',
+            'value' => function($model){
+                if ($model->posted){
+                    return 'Да';
+                } else {
+                    return 'Нет';
+                }
+            }
+        ]
+    ]
 ]) ?>
 

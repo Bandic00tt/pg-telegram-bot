@@ -73,7 +73,7 @@ class SiteController extends Controller
     public function actionViewNews()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => News::find()->orderBy('saved_at DESC')
+            'query' => News::find()->orderBy('pub_date DESC')
         ]);
         
         return $this->render('view-news', [
@@ -81,8 +81,16 @@ class SiteController extends Controller
         ]);
     }   
     
+    /**
+     * Обновляем список новостей (отладка)
+     * @return type
+     */
+    public function actionUpdateNews()
+    {
+        (new \app\components\RssParser())->getNews();
+        return $this->redirect(Yii::$app->request->referrer);
+    }        
     
-
     /**
      * Login action.
      *
