@@ -5,7 +5,7 @@ use yii\grid\GridView;
 $this->title = 'Новости (отладка)';
 ?>
 
-<?= Html::a('Обновить новости', '', [
+<?= Html::a('Обновить новости', 'update-news', [
     'class' => 'btn btn-success'
 ]) ?>
 <br><br>
