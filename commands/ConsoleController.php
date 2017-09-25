@@ -2,13 +2,16 @@
 namespace app\commands;
 
 use yii\console\Controller;
+use app\components\RssParser;
 
 class ConsoleController extends Controller
 {
-    
+    /**
+     * @return type
+     */
     public function actionParseRss()
     {
-        $object = simplexml_load_file('http://pg21.ru/rss');
-        dd($object);
+        $news = (new RssParser())->getNews();
+        return 'Fresh news count: '. count($news);
     }
 }

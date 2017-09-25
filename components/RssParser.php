@@ -27,7 +27,8 @@ class RssParser
             $model = new News();
             $model->load(['News' => $row]);
             if (!$model->save() && !empty($model->errors)){
-                throw new \Exception('Не удалось сохранить новость: '. print_r($model->errors, true));
+                $errorsStr = print_r($model->errors, true);
+                throw new \Exception('Не удалось сохранить новость: '. $errorsStr);
             }
         }
         
