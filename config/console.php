@@ -12,11 +12,39 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.yandex.ru',
+                'port' => '465',
+                'encryption' => 'ssl',
+                'username' => $params['e_name'],
+                'password' => $params['e_pass']
+            ]
+        ],
         'log' => [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'yii\log\EmailTarget',
+                    'levels' => ['error'],
+                    'message' => [
+                        'from' => $params['e_name'],
+                        'to' => ['olegserebryakoff@mail.ru'],
+                        'subject' => 'PG-BOT | Сообщение об ошибке',
+                    ],
+                    'except' => [
+                        'yii\web\HttpException:404',
+                        'yii\web\HttpException:400',
+                    ]
                 ],
             ],
         ],

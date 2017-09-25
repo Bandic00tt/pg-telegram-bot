@@ -49,9 +49,9 @@ $config = [
                     'class' => 'yii\log\EmailTarget',
                     'levels' => ['error'],
                     'message' => [
-                        'from' => $params['e-username'],
+                        'from' => $params['e_name'],
                         'to' => ['olegserebryakoff@mail.ru'],
-                        'subject' => 'VI-CARDS | Сообщение об ошибке',
+                        'subject' => 'PG-BOT | Сообщение об ошибке',
                     ],
                     'except' => [
                         'yii\web\HttpException:404',

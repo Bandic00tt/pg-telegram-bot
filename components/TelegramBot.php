@@ -59,8 +59,7 @@ class TelegramBot
             'Количество получателей' => count($receivers)
         ];
         
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return $result;
+        return json_encode($result, JSON_UNESCAPED_UNICODE);
     }  
     
     /**
@@ -70,7 +69,6 @@ class TelegramBot
     public function getNewsContent($row)
     {
         $content .= "<a href='". $row->url ."' target='_blank'>". $row->title ."</a>";
-        
         return $content;
     }        
     
