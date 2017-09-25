@@ -19,7 +19,8 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "imangazaliev/didom": "^1.12",
-        "telegram-bot/api": "^2.3"
+        "telegram-bot/api": "^2.3",
+        "longman/telegram-bot": "^0.49.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
