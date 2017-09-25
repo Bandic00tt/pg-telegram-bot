@@ -19,7 +19,7 @@ class m170912_110042_create_news_table extends Migration
             'url' => $this->string()->notNull(),
             'description' => $this->text()->notNull(),
             'image' => $this->string(),
-            'dt' => $this->dateTime()->notNull(),
+            'pub_date' => $this->dateTime()->notNull(),
             'saved_at' => $this->dateTime(),
             'posted' => $this->smallInteger()->defaultValue(0)
         ]);

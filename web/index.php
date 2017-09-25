@@ -1,7 +1,7 @@
 <?php
 
 // comment out the following two lines when deployed to production
-if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
+if (strpos(__DIR__, 'htdocs') === false){
     defined('YII_DEBUG') or define('YII_DEBUG', true);
     defined('YII_ENV') or define('YII_ENV', 'dev');
 }
