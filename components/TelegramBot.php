@@ -28,6 +28,10 @@ class TelegramBot
             'posted' => 0
         ])->orderBy('pub_date')->one();
         
+        if (!$freshNewsRow){
+            return false;
+        }
+        
         $newsContent = $this->getNewsContent($freshNewsRow);
         
         $url = $this->getApiUrl();
