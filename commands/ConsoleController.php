@@ -13,6 +13,7 @@ class ConsoleController extends Controller
     public function actionGetFreshNews()
     {
         $news = (new RssParser())->getNews();
+        sleep(1);
         (new TelegramBot())->sendNews();
         
         return 'Fresh news count: '. count($news);

@@ -8,7 +8,6 @@ use GuzzleHttp\Client;
 
 class TelegramBot 
 {
-    private $token = '424152344:AAGiOEAmR-C5VhKokA6jCXcBS9AYo-t1WV8';
     private $ws = 'https://api.telegram.org/bot';
     
     /**
@@ -16,7 +15,7 @@ class TelegramBot
      */
     public function getApiUrl()
     {
-        return $this->ws . $this->token;
+        return $this->ws . Yii::$app->params['bot_token'];
     }        
     
     /**
@@ -30,7 +29,6 @@ class TelegramBot
         ])->orderBy('pub_date')->one();
         
         $newsContent = $this->getNewsContent($freshNewsRow);
-        //return $freshNewsRow;
         
         $url = $this->getApiUrl();
         $receivers = $this->getReceivers();
