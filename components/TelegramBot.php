@@ -68,7 +68,7 @@ class TelegramBot
      */
     public function getNewsContent($row)
     {
-        $content .= "<a href='". $row->url ."' target='_blank'>". $row->title ."</a>";
+        $content = "<a href='". $row->url ."' target='_blank'>". $row->title ."</a>";
         return $content;
     }        
     
