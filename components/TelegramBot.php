@@ -91,6 +91,9 @@ class TelegramBot
             $chatIds[] = $msg['message']['chat']['id'];
         }
         
+        // На всякий случай проверяем на дубликаты
+        $chatIds = array_unique($chatIds);
+        
         return $chatIds;
     }        
 }
