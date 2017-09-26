@@ -44,13 +44,12 @@ class TelegramBot
             ];
             
             $client = new Client();
-            $res = $client->request('GET', $url .'/sendMessage', [
-                'query' => $params
-            ]);
-            
-            $status = $res->getStatusCode();
-            if ($status != 200){
-                throw new \Exception('Ошибка отправки сообщения: '. print_r($res, true));
+            try {
+                $client->request('GET', $url .'/sendMessage', [
+                    'query' => $params
+                ]);
+            } catch (\Exception $e){
+                echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
             }
         }
         
