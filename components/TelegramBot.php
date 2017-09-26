@@ -3,6 +3,7 @@ namespace app\components;
 
 use Yii;
 use app\models\News;
+use app\models\Receiver;
 use yii\helpers\ArrayHelper;
 use GuzzleHttp\Client;
 
@@ -82,19 +83,54 @@ class TelegramBot
      */
     public function getReceivers()
     {
-        $url = $this->getApiUrl();
-        $updJson = file_get_contents($url .'/getUpdates');
-        $updates = json_decode($updJson, true);
+        $this->getReceiversFromApi();
+        $receivers = $this->getReceiversFromDb();
+        
+        return $receivers;
+    }
+    
+    /**
+     * @return type
+     */
+    public function getReceiversFromDb()
+    {
+        $rows = Receiver::find()->all();
+        return $rows;
+    }   
+    
+    /**
+     * @return type
+     */
+    public function getReceiversFromApi()
+    {
+        $updates = $this->getUpdates();
         $msgs = ArrayHelper::getValue($updates, 'result', []);
         $chatIds = [];
         
         foreach ($msgs as $msg){
-            $chatIds[] = $msg['message']['chat']['id'];
+            $chatId = $msg['message']['chat']['id'];
+            $chatIds[] = $chatId;
+            
+            $model = new Receiver();
+            $model->chat_id = $chatId;
+            $model->save();
         }
         
         // На всякий случай проверяем на дубликаты
         $chatIds = array_unique($chatIds);
         
         return $chatIds;
+    }        
+    
+    /**
+     * @return type
+     */
+    public function getUpdates()
+    {
+        $url = $this->getApiUrl();
+        $updJson = file_get_contents($url .'/getUpdates');
+        $updates = json_decode($updJson, true);
+        
+        return $updates;
     }        
 }
