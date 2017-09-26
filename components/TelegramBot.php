@@ -55,7 +55,9 @@ class TelegramBot
         }
         
         $freshNewsRow->posted = 1;
-        $freshNewsRow->save();
+        if (!$freshNewsRow->save()){
+            throw new \Exception(print_r($freshNewsRow->errors, true));
+        }
         
         $result = [
             'ID новости' => $freshNewsRow->news_id,
