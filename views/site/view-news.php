@@ -45,6 +45,20 @@ $this->title = 'Новости (отладка)';
                     return 'Нет';
                 }
             }
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{toggle}',
+            'buttons' => [
+                'toggle' => function($url, $model, $key){
+                    return Html::a('Переключить статус', [
+                        'toggle-news-status', 
+                        'id' => $model->id
+                    ], [
+                        'class' => 'btn btn-danger btn-xs'
+                    ]);
+                }
+            ]
         ]
     ]
 ]) ?>

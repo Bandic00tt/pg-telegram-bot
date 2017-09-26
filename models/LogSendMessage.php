@@ -49,4 +49,17 @@ class LogSendMessage extends \yii\db\ActiveRecord
             'sent_at' => 'Время отправления',
         ];
     }
+    
+    /**
+     * @param type $insert
+     * @return type
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord){
+            $this->sent_at = date('Y-m-d H:i:s');
+        }
+        
+        return parent::beforeSave($insert);
+    }        
 }

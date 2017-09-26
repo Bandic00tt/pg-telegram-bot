@@ -27,10 +27,9 @@ class Receiver extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['chat_id', 'added_at'], 'required'],
+            [['chat_id'], 'required'],
             [['added_at'], 'safe'],
             [['chat_id'], 'string', 'max' => 255],
-            [['chat_id'], 'unique'],
         ];
     }
 

@@ -4,6 +4,7 @@ namespace app\components;
 use Yii;
 use app\models\News;
 use app\models\Receiver;
+use app\models\LogSendMessage;
 use yii\helpers\ArrayHelper;
 use GuzzleHttp\Client;
 
@@ -59,13 +60,13 @@ class TelegramBot
             throw new \Exception(print_r($freshNewsRow->errors, true));
         }
         
-        $result = [
-            'ID новости' => $freshNewsRow->news_id,
-            'Время отправки' => date('Y-m-d H:i:s'),
-            'Количество получателей' => count($receivers)
-        ];
+        $log = new LogSendMessage();
+        $log->news_id = $freshNewsRow->news_id;
+        $log->receivers = json_encode($receivers);
+        $log->r_total = count($receivers);
+        $log->save();
         
-        return json_encode($result, JSON_UNESCAPED_UNICODE);
+        return true;
     }  
     
     /**
@@ -95,7 +96,11 @@ class TelegramBot
     public function getReceiversFromDb()
     {
         $rows = Receiver::find()->all();
-        return $rows;
+        $receivers = array_map(function($item){
+            return $item->chat_id;
+        }, $rows);
+        
+        return $receivers;
     }   
     
     /**
@@ -109,15 +114,17 @@ class TelegramBot
         
         foreach ($msgs as $msg){
             $chatId = $msg['message']['chat']['id'];
+            if (in_array($chatId, $chatIds)){
+                continue;
+            }
             $chatIds[] = $chatId;
             
             $model = new Receiver();
-            $model->chat_id = $chatId;
-            $model->save();
+            $model->chat_id = (string)$chatId;
+            if (!$model->save() && !empty($model->errors)){
+                throw new \Exception(print_r($model->errors, true));
+            }
         }
-        
-        // На всякий случай проверяем на дубликаты
-        $chatIds = array_unique($chatIds);
         
         return $chatIds;
     }        

@@ -87,6 +87,22 @@ class SiteController extends Controller
     {
         (new \app\components\RssParser())->getNews();
         return $this->redirect(Yii::$app->request->referrer);
+    }   
+    
+    /**
+     * Переключаем статус новости. 
+     * В основном для отладки, когда нет новых новостей, а потестить надо
+     * @param type $id
+     */
+    public function actionToggleNewsStatus($id)
+    {
+        $model = News::findOne($id);
+        if ($model){
+            $model->posted = (int)!$model->posted;
+            $model->save();
+        }
+        
+        return $this->redirect(Yii::$app->request->referrer);
     }        
     
     /**
