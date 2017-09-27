@@ -21,12 +21,12 @@ class RssParser
         
         foreach ($data->channel->item as $item){
             $row = [];
-            $row['news_id'] = $this->getNewsId($item->link);
-            $row['title'] = trim($item->title);
-            $row['url'] = trim($item->link);
-            $row['image'] = trim((string)$item->enclosure['url']);
-            $row['description'] = trim($item->description);
-            $row['pub_date'] = $this->getPubDate($item->pubDate);
+            $row['news_id'] = $this->getNewsId($item);
+            $row['title'] = $this->getTitle($item);
+            $row['url'] = $this->getUrl($item);
+            $row['image'] = $this->getImage($item);
+            $row['description'] = $this->getDescription($item);
+            $row['pub_date'] = $this->getPubDate($item);
             
             $model = new News();
             $model->load(['News' => $row]);
@@ -48,19 +48,81 @@ class RssParser
      * @param type $url
      * @return type
      */
-    public function getNewsId($url)
+    public function getNewsId($item)
     {
-        $parts = explode("/", $url);
-        return end($parts);
+        if (isset($item->link)){
+            $url = $item->link;
+            $parts = explode("/", $url);
+            return end($parts);
+        } else {
+            return false;
+        }
     }
+    
+    /**
+     * @param type $item
+     * @return boolean
+     */
+    public function getTitle($item)
+    {
+        if (isset($item->title)){
+            return trim($item->title);
+        } else {
+            return false;
+        }
+    }  
+    
+    /**
+     * @param type $item
+     * @return boolean
+     */
+    public function getUrl($item)
+    {
+        if (isset($item->link)){
+            return trim($item->link);
+        } else {
+            return false;
+        }
+    }        
+    
+    /**
+     * @param type $item
+     * @return boolean
+     */
+    public function getImage($item)
+    {
+        if (isset($item->enclosure)){
+            return trim((string)$item->enclosure['url']);
+        } else {
+            return false;
+        }
+    }   
+    
+    /**
+     * @param type $item
+     * @return boolean
+     */
+    public function getDescription($item)
+    {
+        if (isset($item->description)){
+            return trim($item->description);
+        } else {
+            return false;
+        }
+    }        
     
     /**
      * Получаем дату публикации в приемлемом формате
      * @param type $rawDate
      * @return type
      */
-    public function getPubDate($rawDate)
+    public function getPubDate($item)
     {
-        return date('Y-m-d H:i:s', strtotime($rawDate));
+        if (isset($item->pubDate)){
+            $rawDate = $item->pubDate;
+            return date('Y-m-d H:i:s', strtotime($rawDate));
+        } else {
+            return false;
+        }
     }        
 }
