@@ -35,25 +35,7 @@ class TelegramBot
         }
         
         $newsContent = $this->getNewsContent($freshNewsRow);
-        
-        $url = $this->getApiUrl();
-        $receivers = $this->getReceivers();
-        foreach ($receivers as $r){
-            $params = [
-                'chat_id' => $r,
-                'text' => $newsContent,
-                'parse_mode' => 'HTML'
-            ];
-            
-            $client = new Client();
-            try {
-                $client->request('GET', $url .'/sendMessage', [
-                    'query' => $params
-                ]);
-            } catch (\Exception $e){
-                echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
-            }
-        }
+        $this->sendContent($newsContent);
         
         $freshNewsRow->posted = 1;
         if (!$freshNewsRow->save()){
@@ -68,6 +50,46 @@ class TelegramBot
         
         return true;
     }  
+    
+    /**
+     * @param type $content
+     */
+    public function sendManually($content)
+    {
+        $this->sendContent($content);
+    }    
+
+    /**
+     * @param type $content
+     * @return boolean
+     */
+    public function sendContent($content)
+    {
+        $url = $this->getApiUrl();
+        $receivers = $this->getReceivers();
+        if (empty($receivers)){
+            return false;
+        }
+        
+        foreach ($receivers as $r){
+            $params = [
+                'chat_id' => $r,
+                'text' => $content,
+                'parse_mode' => 'HTML'
+            ];
+            
+            $client = new Client();
+            try {
+                $client->request('GET', $url .'/sendMessage', [
+                    'query' => $params
+                ]);
+            } catch (\Exception $e){
+                echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
+            }
+        }
+        
+        return true;
+    }        
     
     /**
      * @param type $row

@@ -2,11 +2,15 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = 'Новости (отладка)';
+$this->title = 'Новости (из RSS)';
 ?>
 
-<?= Html::a('Обновить новости', 'update-news', [
+<?= Html::a('Обновить новости', 'update-list', [
     'class' => 'btn btn-success'
+]) ?>
+&nbsp;
+<?= Html::a('Ручное отправление', 'send-manually', [
+    'class' => 'btn btn-danger'
 ]) ?>
 <br><br>
 

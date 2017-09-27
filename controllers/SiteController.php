@@ -8,8 +8,6 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\models\News;
-use yii\data\ActiveDataProvider;
 
 class SiteController extends Controller
 {
@@ -62,47 +60,14 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
-    }    
-
-    /**
-     * Выводим новости (отладка)
-     * @return type
-     */
-    public function actionViewNews()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => News::find()->orderBy('pub_date DESC')
-        ]);
-        
-        return $this->render('view-news', [
-            'dataProvider' => $dataProvider
-        ]);
-    }   
+    }
     
     /**
-     * Обновляем список новостей (отладка)
      * @return type
      */
-    public function actionUpdateNews()
+    public function actionStat()
     {
-        (new \app\components\RssParser())->getNews();
-        return $this->redirect(Yii::$app->request->referrer);
-    }   
-    
-    /**
-     * Переключаем статус новости. 
-     * В основном для отладки, когда нет новых новостей, а потестить надо
-     * @param type $id
-     */
-    public function actionToggleNewsStatus($id)
-    {
-        $model = News::findOne($id);
-        if ($model){
-            $model->posted = (int)!$model->posted;
-            $model->save();
-        }
-        
-        return $this->redirect(Yii::$app->request->referrer);
+        return $this->render('stat');
     }        
     
     /**

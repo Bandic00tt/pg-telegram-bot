@@ -70,6 +70,12 @@ $config = [
                 '<action>' => 'site/<action>'
             ],
         ],
+        'rssParser' => [
+            'class' => 'app\components\RssParser'
+        ],
+        'telegramBot' => [
+            'class' => 'app\components\TelegramBot'
+        ],
     ],
     'params' => $params,
 ];

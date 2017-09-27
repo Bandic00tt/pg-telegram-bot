@@ -37,7 +37,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Новости из RSS', 'url' => ['/site/view-news']],
+            ['label' => 'Статистика', 'url' => ['/site/stat']],
+            ['label' => 'Новости', 'url' => ['/news/view-list']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
