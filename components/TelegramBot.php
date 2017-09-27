@@ -35,7 +35,7 @@ class TelegramBot
         }
         
         $newsContent = $this->getNewsContent($freshNewsRow);
-        $this->sendContent($newsContent);
+        $receivers = $this->sendContent($newsContent);
         
         $freshNewsRow->posted = 1;
         if (!$freshNewsRow->save()){
@@ -67,9 +67,6 @@ class TelegramBot
     {
         $url = $this->getApiUrl();
         $receivers = $this->getReceivers();
-        if (empty($receivers)){
-            return false;
-        }
         
         foreach ($receivers as $r){
             $params = [
@@ -88,7 +85,7 @@ class TelegramBot
             }
         }
         
-        return true;
+        return $receivers;
     }        
     
     /**
