@@ -2,6 +2,7 @@
 namespace app\components;
 
 use app\models\News;
+use app\models\SavingError;
 
 class RssParser 
 {
@@ -14,6 +15,9 @@ class RssParser
     public function getNews()
     {
         $data = simplexml_load_file(self::URL);
+        if (empty($data)){
+            return false;
+        }
         
         foreach ($data->channel->item as $item){
             $row = [];
@@ -26,9 +30,13 @@ class RssParser
             
             $model = new News();
             $model->load(['News' => $row]);
-            if (!$model->save() && !empty($model->errors)){
-                $errorsStr = print_r($model->errors, true);
-                throw new \Exception('Не удалось сохранить новость: '. $errorsStr);
+            try {
+                $model->save();
+            } catch (\Exception $e){
+                $err = new SavingError();
+                $err->news_id = $row['news_id'];
+                $err->errors = print_r($model->errors, true) ."\n". $e->getMessage();
+                $err->save();
             }
         }
         
