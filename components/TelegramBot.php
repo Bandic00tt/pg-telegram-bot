@@ -132,6 +132,9 @@ class TelegramBot
         $chatIds = [];
         
         foreach ($msgs as $msg){
+            if (!isset($msg['message'])){
+                continue;
+            }
             $chatId = $msg['message']['chat']['id'];
             if (in_array($chatId, $chatIds)){
                 continue;
