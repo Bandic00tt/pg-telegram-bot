@@ -157,12 +157,12 @@ class TelegramBot
     public function getUpdates()
     {
         // Настройки прокси
-        $user = Yii::$app->params['user'];
-        $pass = Yii::$app->params['pass'];
-        //$host = Yii::$app->params['host'];
-        //$port = Yii::$app->params['port'];
+        $host = Yii::$app->params['host'];
+        $port = Yii::$app->params['port'];
+        //$user = Yii::$app->params['user'];
+        //$pass = Yii::$app->params['pass'];
         //$auth = base64_encode("$user:$pass");
-        
+
         $aContext = array(
             'http' => array(
                 'proxy' => "tcp://$host:$port",
@@ -173,8 +173,14 @@ class TelegramBot
         $cxContext = stream_context_create($aContext);
 
         $url = $this->getApiUrl();
-        $updJson = file_get_contents($url .'/getUpdates', false, $cxContext);
-        $updates = json_decode($updJson, true);
+        $updates = [];
+        try {
+            $updJson = file_get_contents($url .'/getUpdates', false, $cxContext);
+            $updates = json_decode($updJson, true);
+        } catch (\Exception $e) {
+            Yii::error($e->getMessage(). " host: $host; port: $port");
+        }
+        
         
         return $updates;
     }        
