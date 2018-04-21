@@ -157,10 +157,15 @@ class TelegramBot
     public function getUpdates()
     {
         // Настройки прокси
-        $auth = base64_encode('PROXY_5ADB0D602E3C3:002fce4aab19a5a4');
+        $user = Yii::$app->params['user'];
+        $pass = Yii::$app->params['pass'];
+        $host = Yii::$app->params['host'];
+        $port = Yii::$app->params['port'];
+
+        $auth = base64_encode("$user:$pass");
         $aContext = array(
             'http' => array(
-                'proxy' => 'tcp://ams4.proxy.veesecurity.com:443',
+                'proxy' => "tcp://$host:$port",
                 'request_fulluri' => true,
                 'header' => "Proxy-Authorization: Basic $auth",
             ),

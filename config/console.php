@@ -36,7 +36,7 @@ $config = [
                 ],
                 [
                     'class' => 'yii\log\EmailTarget',
-                    'levels' => ['error'],
+                    'levels' => ['error', 'warning'],
                     'message' => [
                         'from' => $params['e_name'],
                         'to' => ['olegserebryakoff@mail.ru'],
