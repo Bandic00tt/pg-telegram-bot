@@ -80,8 +80,7 @@ class TelegramBot
             $client = new Client();
             try {
                 $client->request('GET', $url .'/sendMessage', [
-                    'query' => $params
-                ], [
+                    'query' => $params,
                     'proxy' => "tcp://$host:$port"
                 ]);
             } catch (\Exception $e){
