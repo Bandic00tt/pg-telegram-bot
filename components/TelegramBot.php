@@ -81,7 +81,7 @@ class TelegramBot
             try {
                 $client->request('GET', $url .'/sendMessage', [
                     'query' => $params,
-                    'proxy' => "tcp://$host:$port"
+                    'proxy' => "http://$host:$port"
                 ]);
             } catch (\Exception $e){
                 echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
@@ -168,7 +168,7 @@ class TelegramBot
 
         $aContext = array(
             'http' => array(
-                'proxy' => "tcp://$host:$port",
+                'proxy' => "http://$host:$port",
                 'request_fulluri' => true,
                 //'header' => "Proxy-Authorization: Basic $auth",
             ),
