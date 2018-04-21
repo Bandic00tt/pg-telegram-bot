@@ -157,7 +157,14 @@ class TelegramBot
     public function getUpdates()
     {
         $url = $this->getApiUrl();
-        $updJson = file_get_contents($url .'/getUpdates');
+        $arrContextOptions = [
+            "ssl" => [
+                "verify_peer"=>false,
+                "verify_peer_name"=>false,
+            ],
+        ]; 
+
+        $updJson = file_get_contents($url .'/getUpdates', false, stream_context_create($arrContextOptions));
         $updates = json_decode($updJson, true);
         
         return $updates;
