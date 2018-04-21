@@ -168,7 +168,7 @@ class TelegramBot
 
         $aContext = array(
             'http' => array(
-                'proxy' => "http://$host:$port",
+                'proxy' => "tcp://$host:$port",
                 'request_fulluri' => true,
                 //'header' => "Proxy-Authorization: Basic $auth",
             ),
