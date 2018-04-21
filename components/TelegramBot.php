@@ -67,6 +67,8 @@ class TelegramBot
     {
         $url = $this->getApiUrl();
         $receivers = $this->getReceivers();
+        $host = Yii::$app->params['host'];
+        $port = Yii::$app->params['port'];
         
         foreach ($receivers as $r){
             $params = [
@@ -79,6 +81,8 @@ class TelegramBot
             try {
                 $client->request('GET', $url .'/sendMessage', [
                     'query' => $params
+                ], [
+                    'proxy' => "tcp://$host:$port"
                 ]);
             } catch (\Exception $e){
                 echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
