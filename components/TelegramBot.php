@@ -159,15 +159,15 @@ class TelegramBot
         // Настройки прокси
         $user = Yii::$app->params['user'];
         $pass = Yii::$app->params['pass'];
-        $host = Yii::$app->params['host'];
-        $port = Yii::$app->params['port'];
-
-        $auth = base64_encode("$user:$pass");
+        //$host = Yii::$app->params['host'];
+        //$port = Yii::$app->params['port'];
+        //$auth = base64_encode("$user:$pass");
+        
         $aContext = array(
             'http' => array(
                 'proxy' => "tcp://$host:$port",
                 'request_fulluri' => true,
-                'header' => "Proxy-Authorization: Basic $auth",
+                //'header' => "Proxy-Authorization: Basic $auth",
             ),
         );
         $cxContext = stream_context_create($aContext);
