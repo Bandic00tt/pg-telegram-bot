@@ -156,15 +156,19 @@ class TelegramBot
      */
     public function getUpdates()
     {
-        $url = $this->getApiUrl();
-        $arrContextOptions = [
-            "ssl" => [
-                "verify_peer"=>false,
-                "verify_peer_name"=>false,
-            ],
-        ]; 
+        // Настройки прокси
+        $auth = base64_encode('PROXY_5ADB0D602E3C3:002fce4aab19a5a4');
+        $aContext = array(
+            'http' => array(
+                'proxy' => 'tcp://ams4.proxy.veesecurity.com:443',
+                'request_fulluri' => true,
+                'header' => "Proxy-Authorization: Basic $auth",
+            ),
+        );
+        $cxContext = stream_context_create($aContext);
 
-        $updJson = file_get_contents($url .'/getUpdates', false, stream_context_create($arrContextOptions));
+        $url = $this->getApiUrl();
+        $updJson = file_get_contents($url .'/getUpdates', false, $cxContext);
         $updates = json_decode($updJson, true);
         
         return $updates;
