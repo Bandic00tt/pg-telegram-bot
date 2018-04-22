@@ -2,12 +2,13 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
+use app\models\Proxy;
 use yii\web\Response;
-use yii\filters\VerbFilter;
+use yii\web\Controller;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 class SiteController extends Controller
 {
@@ -120,13 +121,31 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
+    public function actionProxy()
     {
-        return $this->render('about');
+        $model = new Proxy();
+        $proxies = Proxy::find()->orderBy('id desc')->all();
+
+        return $this->render('proxy', compact('model', 'proxies'));
+    }
+
+    public function actionAddProxy()
+    {
+        $model = new Proxy();
+        $model->load(Yii::$app->request->post());
+        $model->save();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionDeleteProxy($id)
+    {
+        $model = Proxy::findOne($id);
+
+        if ($model) {
+            $model->delete();
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
     }
 }

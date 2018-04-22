@@ -3,10 +3,11 @@ namespace app\components;
 
 use Yii;
 use app\models\News;
-use app\models\Receiver;
-use app\models\LogSendMessage;
-use yii\helpers\ArrayHelper;
+use app\models\Proxy;
 use GuzzleHttp\Client;
+use app\models\Receiver;
+use yii\helpers\ArrayHelper;
+use app\models\LogSendMessage;
 
 class TelegramBot 
 {
@@ -59,6 +60,12 @@ class TelegramBot
         $this->sendContent($content);
     }    
 
+    public function getLastAddedProxy()
+    {
+        $proxy = Proxy::find()->orderBy('id desc')->one();
+        return $proxy ? ['host' => $proxy->ip, 'port' => $proxy->port] : false;
+    }
+
     /**
      * @param type $content
      * @return boolean
@@ -67,8 +74,11 @@ class TelegramBot
     {
         $url = $this->getApiUrl();
         $receivers = $this->getReceivers();
-        $host = Yii::$app->params['host'];
-        $port = Yii::$app->params['port'];
+        $proxy = $this->getLastAddedProxy();
+        if ($proxy) {
+            $host = $proxy['host'];
+            $port = $proxy['port'];
+        }
         
         foreach ($receivers as $r){
             $params = [
@@ -79,10 +89,15 @@ class TelegramBot
             
             $client = new Client();
             try {
-                $client->request('GET', $url .'/sendMessage', [
+                $sendParams = [
                     'query' => $params,
-                    'proxy' => "http://$host:$port"
-                ]);
+                ];
+
+                if ($proxy) {
+                    $sendParams['proxy'] = "http://$host:$port";
+                }
+
+                $client->request('GET', $url .'/sendMessage', $sendParams);
             } catch (\Exception $e){
                 echo 'Ошибка отправки сообщения: '. $e->getMessage() . "\n";
             }
@@ -160,25 +175,31 @@ class TelegramBot
     public function getUpdates()
     {
         // Настройки прокси
-        $host = Yii::$app->params['host'];
-        $port = Yii::$app->params['port'];
         //$user = Yii::$app->params['user'];
         //$pass = Yii::$app->params['pass'];
         //$auth = base64_encode("$user:$pass");
 
-        $aContext = array(
-            'http' => array(
-                'proxy' => "tcp://$host:$port",
-                'request_fulluri' => true,
-                //'header' => "Proxy-Authorization: Basic $auth",
-            ),
-        );
-        $cxContext = stream_context_create($aContext);
-
         $url = $this->getApiUrl();
         $updates = [];
         try {
-            $updJson = file_get_contents($url .'/getUpdates', false, $cxContext);
+            $proxy = $this->getLastAddedProxy();
+            if ($proxy) {
+                $host = $proxy['host'];
+                $port = $proxy['port'];
+
+                $aContext = [
+                    'http' => [
+                        'proxy' => "tcp://$host:$port",
+                        'request_fulluri' => true,
+                        //'header' => "Proxy-Authorization: Basic $auth",
+                    ],
+                ];
+                $cxContext = stream_context_create($aContext);
+                $updJson = file_get_contents($url .'/getUpdates', false, $cxContext);
+            } else {
+                $updJson = file_get_contents($url .'/getUpdates');
+            }
+            
             $updates = json_decode($updJson, true);
         } catch (\Exception $e) {
             Yii::error($e->getMessage(). " host: $host; port: $port");

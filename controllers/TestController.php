@@ -10,7 +10,6 @@ class TestController extends Controller
 {
     public function actionTest()
     {
-        Yii::$app->response->format = yii\web\Response::FORMAT_JSON;
-        dd((new TelegramBot())->getUpdates());
+        dd((new TelegramBot())->getLastAddedProxy());
     }        
 }

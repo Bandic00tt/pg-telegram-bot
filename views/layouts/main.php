@@ -37,8 +37,9 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Статистика', 'url' => ['/site/stat']],
             ['label' => 'Новости', 'url' => ['/news/view-list']],
+            ['label' => 'Настройки прокси', 'url' => ['/site/proxy']],
+            ['label' => 'Статистика', 'url' => ['/site/stat']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
