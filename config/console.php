@@ -34,6 +34,7 @@ $config = [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
+                /*
                 [
                     'class' => 'yii\log\EmailTarget',
                     'levels' => ['error', 'warning'],
@@ -47,6 +48,7 @@ $config = [
                         'yii\web\HttpException:400',
                     ]
                 ],
+                */
             ],
         ],
         'db' => $db,
